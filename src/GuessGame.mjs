@@ -1,3 +1,9 @@
+/**
+ * @file GuessGame.mjs
+ * @author Joseph Leskey
+ * @date 19 March 2024
+ */
+
 import express from 'express';
 import bodyParser from 'body-parser';
 
