@@ -1,0 +1,11 @@
+{
+  "name": "leskey_lab13",
+  "version": "0.0.0",
+  "main": "src/GuessGame.js",
+  "scripts": {
+    "start": "node src/GuessGame.js"
+  },
+  "author": "Joseph Leskey <josleskey@mail.mvnu.edu>",
+  "license": "MIT",
+  "description": ""
+}
