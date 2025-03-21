@@ -7,15 +7,25 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 
-const app = express();
-
 const port = 8080;
 
-// Using body-parser allows you to access request.body from within
-// routes and use that data.
-app.use(bodyParser.urlencoded({ extended: true }));
+const app = setup(port);
 
-const form =
+let number;
+
+/**
+ * Hosts the game on a local server.
+ *
+ * @param {number} port Port number
+ */
+function setup(port) {
+	const app = express();
+
+	// Using body-parser allows you to access request.body from within
+	// routes and use that data.
+	app.use(bodyParser.urlencoded({ extended: true }));
+
+	const form =
 	'<h2>Welcome to Guess the Number Game!</h2>' +
 	'<p><strong>To play, guess a number between 1 and 100.</strong></p>' +
 	'<form action="/" method="post">' +
@@ -24,13 +34,18 @@ const form =
 	'<input type="submit">' +
 	'</form>';
 
-app.get('/', (_, res) => {
-	response.send(form);
-});
+	app.get('/', (_, res) => {
+		res.send(form);
+	});
 
-app.post('/', (req, res) => {
-	res.send(`${form}<p>Your guess is: ${req.body.guess}</p>`);
-});
+	app.post('/', (req, res) => {
+		res.send(`${form}<p>Your guess is: ${req.body.guess}</p>`);
+	});
+
+	app.listen(port, () => console.log(`Listening on port ${port}.`));
+
+	return app;
+}
 
 /**
  * Generates a pseudorandom number between two values (inclusive).
@@ -42,5 +57,3 @@ app.post('/', (req, res) => {
 function between(min, max) {
 	return Math.floor(Math.random() * (max - min + 1) + min);
 }
-
-app.listen(port, () => console.log(`Listening on port ${port}.`));
