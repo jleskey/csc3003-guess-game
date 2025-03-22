@@ -12,6 +12,10 @@ const port = 8080;
 // Set up an Express app.
 const app = setup(port);
 
+// Set boundary defaults.
+let min = 0;
+let max = 100;
+
 // Attach the game loop.
 hostGameLoop('/', app);
 
@@ -26,7 +30,7 @@ function hostGameLoop(path, app) {
 
 	app.post(path, (req, res) => {
 		const guess = req.body.guess;
-		const reply = (body) => res.send(html(body));
+		const reply = (body) => res.send(para(body));
 
 		if (!guess) {
 			reply('You didn\'t even try to guess? :(');
@@ -57,15 +61,22 @@ function setup(port) {
 }
 
 /**
+ * Crafts an HTML response with the given content as a paragraph.
+ *
+ * @param {string?} content Content to display in the body of the HTML
+ * @returns {string} The given content, wrapped in appropriate HTML
+ */
+function para(content) {
+	return html(content ? `<p>${content}</p>` : '');
+}
+
+/**
  * Crafts an HTML response with the given content.
  *
  * @param {string?} content Content to display in the body of the HTML
  * @returns {string} The given content, wrapped in appropriate HTML
  */
-function html(content, isParagraph = true) {
-	const insert = content
-		? `\n${isParagraph ? `<p>${content}</p>` : content}`
-		: '';
+function html(content) {
 	return `
 		<!DOCTYPE html>
 		<html>
@@ -76,15 +87,18 @@ function html(content, isParagraph = true) {
 			<body>
 				<h2>Welcome to Guess the Number Game!</h2>
 				<p>
-					<strong>To play, guess a number between 1 and 100.</strong>
+					<strong>
+						To play, guess a number between ${min} and ${max}.
+					</strong>
 				</p>
 				<form action="/" method="post">
 					<p>
 						<label for="guess">Enter your guess: </label>
-						<input type="number" name="guess">
+						<input type="number" name="guess" min="${min}"
+							max="${max}">
 					</p>
 					<input type="submit">
-				</form>${insert}
+				</form>${content ? `\n${content}` : ''}
 			</body>
 		</html>
 	`;
