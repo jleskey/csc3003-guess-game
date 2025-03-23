@@ -25,23 +25,23 @@ let guessesRemaining;
 
 // Game loop
 app.post(gamePath, (req, res) => {
-	const guess = req.body.guess;
-	const reply = (body) => res.send(para(body));
+    const guess = req.body.guess;
+    const reply = (body) => res.send(para(body));
 
-	if (guess) {
-		if (guess == number) {
-			reply('Wow, you got it. Great work. Want to go again?');
-			startGame();
-		} else if (!isNaN(guess)) {
-			reply(`That\'s wrong. Aim ${+guess < number ? 'higher': 'lower'}.
-					<br><br>Guesses remaining: ${guessesRemaining--}`);
-		} else {
-			reply("You may have missed the fact that you were filling out a \
-					number input. Just saying.");
-		}
-	} else {
-		reply('You didn\'t even try to guess? :(');
-	}
+    if (guess) {
+        if (guess == number) {
+            reply('Wow, you got it. Great work. Want to go again?');
+            startGame();
+        } else if (!isNaN(guess)) {
+            reply(`That\'s wrong. Aim ${+guess < number ? 'higher' : 'lower'}.
+                    <br><br>Guesses remaining: ${guessesRemaining--}`);
+        } else {
+            reply("You may have missed the fact that you were filling out a \
+                    number input. Just saying.");
+        }
+    } else {
+        reply('You didn\'t even try to guess? :(');
+    }
 });
 
 /**
@@ -51,37 +51,37 @@ app.post(gamePath, (req, res) => {
  * @returns {express.Express} An express app
  */
 function setup(port) {
-	const app = express();
+    const app = express();
 
-	// Using body-parser allows you to access request.body from within
-	// routes and use that data.
-	app.use(bodyParser.urlencoded({ extended: true }));
+    // Using body-parser allows you to access request.body from within
+    // routes and use that data.
+    app.use(bodyParser.urlencoded({ extended: true }));
 
-	app.get(gamePath, (_, res) => {
-		res.send(html());
-	});
+    app.get(gamePath, (_, res) => {
+        res.send(html());
+    });
 
-	app.listen(port, () => {
-		console.log(`Listening on port ${port}.`);
-		startGame();
-	});
+    app.listen(port, () => {
+        console.log(`Listening on port ${port}.`);
+        startGame();
+    });
 
-	return app;
+    return app;
 }
 
 /**
  * Starts a new game.
  */
 function startGame() {
-	gameNumber++;
+    gameNumber++;
 
-	number = between(min, max);
+    number = between(min, max);
 
-	// We'll be nice and make winning more or less mathematically
-	// guaranteed (if you play like a binary search algorithm).
-	guessesRemaining = Math.ceil(Math.log2(max - min + 1));
+    // We'll be nice and make winning more or less mathematically
+    // guaranteed (if you play like a binary search algorithm).
+    guessesRemaining = Math.ceil(Math.log2(max - min + 1));
 
-	console.log(`\nStarted game #${gameNumber}. The number is ${number}.`);
+    console.log(`\nStarted game #${gameNumber}. The number is ${number}.`);
 }
 
 /**
@@ -91,7 +91,7 @@ function startGame() {
  * @returns {string} The given content, wrapped in appropriate HTML
  */
 function para(content) {
-	return html(content ? `<p>${content}</p>` : '');
+    return html(content ? `<p>${content}</p>` : '');
 }
 
 /**
@@ -101,31 +101,31 @@ function para(content) {
  * @returns {string} The given content, wrapped in appropriate HTML
  */
 function html(content) {
-	return `
-		<!DOCTYPE html>
-		<html>
-			<head>
-				<title>Joseph's Guessing Game</title>
-				<meta charset="utf-8">
-			</head>
-			<body>
-				<h2>Welcome to Guess the Number Game!</h2>
-				<p>
-					<strong>
-						To play, guess a number between ${min} and ${max}.
-					</strong>
-				</p>
-				<form action="/" method="post">
-					<p>
-						<label for="guess">Enter your guess: </label>
-						<input type="number" name="guess" min="${min}"
-							max="${max}">
-					</p>
-					<input type="submit">
-				</form>${content ? `\n${content}` : ''}
-			</body>
-		</html>
-	`;
+    return `
+        <!DOCTYPE html>
+        <html>
+            <head>
+                <title>Joseph's Guessing Game</title>
+                <meta charset="utf-8">
+            </head>
+            <body>
+                <h2>Welcome to Guess the Number Game!</h2>
+                <p>
+                    <strong>
+                        To play, guess a number between ${min} and ${max}.
+                    </strong>
+                </p>
+                <form action="/" method="post">
+                    <p>
+                        <label for="guess">Enter your guess: </label>
+                        <input type="number" name="guess" min="${min}"
+                            max="${max}">
+                    </p>
+                    <input type="submit">
+                </form>${content ? `\n${content}` : ''}
+            </body>
+        </html>
+    `;
 }
 
 /**
@@ -136,5 +136,5 @@ function html(content) {
  * @returns {number} The generated pseudorandom number
  */
 function between(min, max) {
-	return Math.floor(Math.random() * (max - min + 1) + min);
+    return Math.floor(Math.random() * (max - min + 1) + min);
 }
