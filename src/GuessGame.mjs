@@ -18,27 +18,18 @@ const app = setup(port);
 let min = 0;
 let max = 100;
 
-// Attach the game loop.
-hostGameLoop(gamePath, app);
+// Game state
+let number = 0;
 
-/**
- * Attach and initialize the game loop.
- *
- * @param {string} path The host path
- * @param {express.Express} app An app to act as host
- */
-function hostGameLoop(path, app) {
-	let number;
+// Game loop
+app.post(gamePath, (req, res) => {
+	const guess = req.body.guess;
+	const reply = (body) => res.send(para(body));
 
-	app.post(path, (req, res) => {
-		const guess = req.body.guess;
-		const reply = (body) => res.send(para(body));
-
-		if (!guess) {
-			reply('You didn\'t even try to guess? :(');
-		}
-	});
-}
+	if (!guess) {
+		reply('You didn\'t even try to guess? :(');
+	}
+});
 
 /**
  * Hosts the game on a local server.
