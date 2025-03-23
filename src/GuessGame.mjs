@@ -21,6 +21,7 @@ let max = 100;
 // Game state
 let gameNumber = 0;
 let number;
+let guessesRemaining;
 
 // Game loop
 app.post(gamePath, (req, res) => {
@@ -32,13 +33,10 @@ app.post(gamePath, (req, res) => {
 			reply('Wow, you got it. Great work. Want to go again?');
 			startGame();
 		} else if (!isNaN(guess)) {
-			if (+guess < number) {
-				reply("That's wrong. Aim higher.");
-			} else {
-				reply("That's wrong. Aim lower.")
-			}
+			reply(`That\'s wrong. Aim ${+guess < number ? 'higher': 'lower'}.
+					<br><br>Guesses remaining: ${guessesRemaining--}`);
 		} else {
-			reply("You might have missed the fact that you were filling out a \
+			reply("You may have missed the fact that you were filling out a \
 					number input. Just saying.");
 		}
 	} else {
@@ -76,7 +74,13 @@ function setup(port) {
  */
 function startGame() {
 	gameNumber++;
+
 	number = between(min, max);
+
+	// We'll be nice and make winning more or less mathematically
+	// guaranteed (if you play like a binary search algorithm).
+	guessesRemaining = Math.ceil(Math.log2(max - min + 1));
+
 	console.log(`\nStarted game #${gameNumber}. The number is ${number}.`);
 }
 
