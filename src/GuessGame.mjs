@@ -32,7 +32,11 @@ app.post(gamePath, (req, res) => {
 			reply('Wow, you got it. Great work. Want to go again?');
 			startGame();
 		} else if (!isNaN(guess)) {
-			reply("That's wrong. Do better.")
+			if (+guess < number) {
+				reply("That's wrong. Aim higher.");
+			} else {
+				reply("That's wrong. Aim lower.")
+			}
 		} else {
 			reply("You might have missed the fact that you were filling out a \
 					number input. Just saying.");
