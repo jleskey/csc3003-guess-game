@@ -19,14 +19,25 @@ let min = 0;
 let max = 100;
 
 // Game state
-let number = 0;
+let gameNumber = 0;
+let number;
 
 // Game loop
 app.post(gamePath, (req, res) => {
 	const guess = req.body.guess;
 	const reply = (body) => res.send(para(body));
 
-	if (!guess) {
+	if (guess) {
+		if (guess == number) {
+			reply('Wow, you got it. Great work. Want to go again?');
+			startGame();
+		} else if (!isNaN(guess)) {
+			reply("That's wrong. Do better.")
+		} else {
+			reply("You might have missed the fact that you were filling out a \
+					number input. Just saying.");
+		}
+	} else {
 		reply('You didn\'t even try to guess? :(');
 	}
 });
@@ -48,9 +59,21 @@ function setup(port) {
 		res.send(html());
 	});
 
-	app.listen(port, () => console.log(`Listening on port ${port}.`));
+	app.listen(port, () => {
+		console.log(`Listening on port ${port}.`);
+		startGame();
+	});
 
 	return app;
+}
+
+/**
+ * Starts a new game.
+ */
+function startGame() {
+	gameNumber++;
+	number = between(min, max);
+	console.log(`\nStarted game #${gameNumber}. The number is ${number}.`);
 }
 
 /**
