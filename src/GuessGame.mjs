@@ -7,17 +7,19 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 
+// App settings
 const port = 8080;
+const gamePath = '/';
 
 // Set up an Express app.
 const app = setup(port);
 
-// Set boundary defaults.
+// Game settings
 let min = 0;
 let max = 100;
 
 // Attach the game loop.
-hostGameLoop('/', app);
+hostGameLoop(gamePath, app);
 
 /**
  * Attach and initialize the game loop.
@@ -51,7 +53,7 @@ function setup(port) {
 	// routes and use that data.
 	app.use(bodyParser.urlencoded({ extended: true }));
 
-	app.get('/', (_, res) => {
+	app.get(gamePath, (_, res) => {
 		res.send(html());
 	});
 
