@@ -37,7 +37,7 @@ app.post(gamePath, (req, res) => {
 
 /**
  * Responds to the player playing taking an action
- * @param {string} guess The action
+ * @param {string} action The action
  * @param {(body) => express.Response} reply Function to send a reply
  */
 function processAction(action, value, reply) {
